@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id='app'>
+        <button @click='fun'>按钮+100</button>{{num}}
+        <button @click='fun1(1,$event)'>按钮+1</button>
+
+    </div>
+    <script src='./vue.js'></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                num: 0
+            },
+            methods: {
+                fun(event) {
+                    //拿到  按钮+100  这个字符串
+                    let str = event.target.innerHTML
+                    str = str.substr(str.indexOf('+' + 1)) * 1
+                    this.num += str
+
+                },
+                fun1(num1, event) {
+                    let str = event.target.innerHTML
+                    str = str.substr(str.indexOf('+' + 1)) * 1
+                    this.num += num1
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>

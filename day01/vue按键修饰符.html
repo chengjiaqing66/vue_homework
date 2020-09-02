@@ -6,29 +6,21 @@
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <meta http-equiv='X-UA-Compatible' content='ie=edge'>
     <title>Document</title>
-    <style>
-        [v-cloak] {
-            display: none;
-        }
-    </style>
 </head>
 
 <body>
-    <div id='app' v-cloak>
-        <input type="text" :value='msg' @input='fun'>{{msg}}
+    <div id='app'>
+        <!-- 键盘抬起事件, 如果按下的是回车键 触发执行submit方法 .enter .space .delete .esc 上下左右 -->
+        <input type="text" @keyup.enter="fun" />
     </div>
     <script src='./vue.js'></script>
-
     <script>
-        //双向绑定用到属性绑定和事件绑定结合
         new Vue({
             el: '#app',
-            data: {
-                msg: '好好练习'
-            },
+            data: {},
             methods: {
                 fun() {
-                    this.msg = event.target.value
+                    console.log('按下了enter键');
                 }
             },
         })

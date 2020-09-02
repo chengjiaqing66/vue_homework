@@ -1,0 +1,79 @@
+jquery 封装了操作dom的库 简化了dom操作
+vue不推荐操作dom
+vue : 渐进式javascript框架 
+vue优点 : 
+1易用: 基础好 好学 
+2.灵活: 在库和框架之间自如伸缩 
+3.高效: 加载快20kb,
+
+1.引入Vue.js
+<script src="./js/vue.js"></script>
+2.写html代码
+<button id="app">{{msg}}</button>
+3.创建Vue实例
+var vm=new Vue({
+      el : '#app',
+      data : {
+           msg : 'hello' 
+   }
+  methods : {
+       say: function(参数,event){
+          this.num++
+  }
+ }
+})
+
+指令:自定义属性就是指令
+v-cloak //解决插值表达式闪动
+用法 : 
+1. 提供样式 [v-cloak]{display:none;}
+2.在插值表达式所在的标签中添加v-cloak指令
+
+v-text='msg' //填充纯文本
+
+v-html='msg'//填充HTML片段(不推荐)
+
+v-pre //填充原始信息(不编译)
+
+v-once //只编译一次,提高性能
+
+v-model='uname'//双向绑定:数据驱动视图 视图也可以驱动数据
+
+v-on:事件类型='say('参数',$event)'//点击事件绑定   不传参拿innerHTMl=e.target.innerHTML  传参innerHTMl=event.target.innerHTML
+
+事件修饰符 : stop(阻止冒泡) prevent(阻止默认行为) once(只触发一次)
+@click.stop='say'//阻止冒泡  
+
+@click.prevent='say'//阻止默认行为
+
+@click.prevent.once='say'//阻止默认行为,注意只阻止一次(顺序很重要)
+
+按键修饰符
+@keyup.enter='fn'//键盘enter事件
+
+先定义:Vue.config.keyCodes.a=65
+@keyup.a='fn'//自定义键盘事件
+
+双向绑定的本质 : 使用了属性绑定和事件绑定
+v-band:href='url'//属性绑定
+样式绑定相关语法细节：
+      1、对象绑定和数组绑定可以结合使用
+      2、class绑定的值可以简化操作
+      3、默认的class如何处理？默认的class会保留
+v-band:class='{active: isActive,active1:isActive}'//(类)样式{}绑定 注意:属性绑定的样式和原有的类样式不会冲突
+
+:class='[activeClass,errorClass]'//(类)样式[]绑定
+
+v-bind:style='obj'//行内样式绑定
+
+v-if ='num>=90'//分支语句条件成立显示.不成立不显示
+v-else-if='num>=80'//同上(条件不成立元素不渲染)
+v-else//都不成立显示
+
+v-show='flag'//推荐(元素以渲染)控制元素样式是否显示.相当于display:none
+
+:key='item.id/index' v-for='(item,index) in fruits'//遍历fruit里面的 item和index
+
+v-for='(value,key,index) in obj'//依次是属性值,属性名,索引
+
+v-if='v==13' v-for='(v,k,i) in obj'//结合使用
