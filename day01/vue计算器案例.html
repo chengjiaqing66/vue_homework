@@ -1,0 +1,66 @@
+</html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="vue.js"></script>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div v-cloak id="app">
+
+        <input type="text" v-model='num1' @keyup.enter='fun'>
+        <select v-model='sep'>
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">*</option>
+            <option value="/">/</option>
+        </select>
+        <input type="text" v-model='num2' @keyup.enter='fun'>
+        <button @click='fun'>计算</button>
+
+        <div>计算结果是{{res}}</div>
+    </div>
+
+    <script>
+        new Vue({
+
+            el: '#app',
+            data: {
+                num1: '',
+                num2: '',
+                sep: '+',
+                res: ''
+
+            },
+            methods: {
+                fun() {
+                    if (this.sep == "+") {
+                        this.res = this.num1 * 1 + this.num2 * 1
+                    }
+                    if (this.sep == "-") {
+                        this.res = this.num1 * 1 - this.num2 * 1
+                    }
+                    if (this.sep == "*") {
+                        this.res = this.num1 * 1 * this.num2 * 1
+                    }
+                    if (this.sep == "/") {
+                        this.res = this.num1 * 1 / this.num2 * 1
+                    }
+                }
+            }
+
+        })
+    </script>
+</body>
+
+</html>
