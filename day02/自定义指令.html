@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id='app'>
+
+        <input type="text" v-abx='msg'>
+    </div>
+    <script src='../vue.js'></script>
+    <script>
+        //Vue.directive('指令名'{配置对象}) 注意全局指令创建在实例之前
+        Vue.directive('abs', {
+            //e代表当前使用指令的dom元素 inserted固定写法
+            inserted(el) {
+                el.focus()
+            }
+        })
+
+
+
+        //带参数的指令
+        Vue.directive('abx', {
+            //e代表当前使用指令的dom元素 inserted固定写法
+            bind(el, binding) {
+                //设置背景色 binding.value指向msg
+                el.style.backgroundColor = binding.value.bgccolor
+                el.style.color = binding.value.color
+            }
+        })
+        new Vue({
+            el: '#app',
+            data: {
+                msg: {
+                    color: 'red',
+                    bgccolor: 'green'
+                }
+            },
+            methods: {},
+        })
+    </script>
+</body>
+
+</html>

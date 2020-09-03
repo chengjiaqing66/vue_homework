@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id='app'>
+        {{msg}} {{reverses}}
+    </div>
+    <script src='../vue.js'></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                msg: 'hellow'
+            },
+            methods: {
+
+            },
+            directives: {},
+            computed: {
+                //形式上是函数,最终使用的时候当属性来使用
+                reverses() {
+                    return this.msg.split("").reverse().join("")
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

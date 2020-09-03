@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id='app'>
+        <!-- vue中有diff算法,更新较少变动的节点 ,所以一定要在v-for的时候加上:key='item.id'-->
+        <ul>
+            <li v-for='(item,index) in arr'> <input type="radio" name="" id=""><span>{{item}}</span></li>
+
+        </ul>
+
+    </div>
+    <script src='../vue.js'></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                arr: ['小明', '小红', '小黑'],
+                arr1: [{
+                    id: 1,
+                    name: '猴子',
+                    age: 50
+                }, {
+                    id: 2,
+                    name: '猪',
+                    age: 30
+                }, {
+                    id: 3,
+                    name: '人',
+                    age: 120
+                }],
+                obj: {
+                    id: 4,
+                    name: '奥特曼',
+                    age: 1200000000
+                }
+            },
+            methods: {},
+        })
+    </script>
+</body>
+
+</html>
