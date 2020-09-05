@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id='app'>
+        <div>{{sum}}</div>
+        <input type="text" name="" id="" v-model.number='num1'>
+        <input type="text" name="" id="" v-model.number='num2'>
+        <input type="text" v-model.lazy='uname'><span>{{tip}}</span>
+    </div>
+    <script src='../vue.js'></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                num1: '',
+                num2: '',
+                sum: '',
+                uname: '',
+                tip: ''
+            },
+            methods: {
+                checkname(uname) {
+                    setTimeout(() => {
+                        if (uname == 'admin') {
+                            this.tip = "用户存在,需要更换一个"
+                        } else {
+                            this.tip = "用户名可以使用"
+                        }
+                    }, 2000)
+                }
+            },
+            computed: {
+
+            },
+            watch: {
+                num1(val) {
+                    this.sum = this.num2 + val
+                },
+                num2(val) {
+                    this.sum = this.num1 + val
+                },
+                uname(val) {
+                    this.checkname(val)
+                    this.tip = '正在验证...'
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
