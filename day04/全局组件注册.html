@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div id='app'>
+        <button-i></button-i>
+        <button-i></button-i>
+        <button-i></button-i>
+        <button-i></button-i>
+        <div-i></div-i>
+        <a-a></a-a>
+        <a-b></a-b>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        Vue.component('div-i', {
+            data() {
+
+            },
+            template: `<div>我是div<button-i></button-i> </div>`
+
+
+        })
+
+        Vue.component('button-i', {
+            data() {
+                return {
+                    num: 0
+                }
+            },
+            template: ` <div>
+            <button @click='fun'>点击+1</button>
+            <div>{{num}}</div>
+        </div>`,
+            methods: {
+                fun() {
+                    this.num++
+                }
+            }
+        })
+        const obja = {
+            template: `<div>局部组件a</div>`
+        }
+        const objb = {
+            template: `<div>局部组件b</div>`
+        }
+        new Vue({
+            el: '#app',
+            data: {},
+            methods: {},
+            components: {
+                'a-a': obja,
+                'a-b': objb
+            }
+        })
+    </script>
+</body>
+
+</html>

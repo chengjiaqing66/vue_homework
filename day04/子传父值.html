@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id='app'>
+
+        <!-- 1.传递,在子组件使用的位置,通过属性绑定 -->
+
+        <com-b :title='ptitle' :abs='pname' :arr='parr' :obj='pobj' :boo='pboo' :num='pnum'></com-b>
+
+    </div>
+    <script src='https://cdn.jsdelivr.net/npm/vue/dist/vue.js'></script>
+    <script>
+        Vue.component('com-b', {
+            // 2.接收 注意 接收的是属性名
+            props: ['title', 'abs', 'arr', 'obj', 'boo', 'num'],
+            template: `<div>我是子组件 接收1:{{title}} 接收2:{{abs}}  {{arr}} {{obj}} {{boo}} {{num}} </div> `,
+            data() {
+                return {
+                    msg: '我是子组件的值'
+                }
+            }
+        })
+        new Vue({
+            el: '#app',
+            data: {
+                pmsg: '我是父组件的值',
+                ptitle: '我是父组件动态绑定属性',
+                pname: '父亲的动态的数据',
+                parr: [1, 2, 3],
+                pobj: {
+                    name: '小明'
+                },
+                pboo: true,
+                pnum: 18
+            },
+            methods: {},
+        })
+    </script>
+</body>
+
+</html>

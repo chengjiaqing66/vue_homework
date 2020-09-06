@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id='app'>
+        <!-- 具名插槽 -->
+        <com-a>
+            <div slot="header">头部</div>
+            <div>中间</div>
+            <div slot="footer">底部</div>
+        </com-a>
+        <hr>
+        <com-a>
+            <template v-solt:header><div>头部</div></template>
+            <div>中间</div>
+            <template v-solt:footer><div>底部</div></template>
+
+        </com-a>
+
+    </div>
+    <script src='https://cdn.jsdelivr.net/npm/vue/dist/vue.js'></script>
+    <script>
+        Vue.component('com-a', {
+            template: `<div>
+            
+                       <strong>
+                           <slot name='header'></slot>
+                       </strong>
+                       <strong>
+                           <slot></slot>
+                       </strong>
+                       <strong>
+                           <slot name='footer'></slot>
+                       </strong>
+                    </div>
+                       
+                       
+                       `,
+            data() {
+                return {
+                    msg: 111
+                }
+            }
+        })
+        new Vue({
+            el: '#app',
+            data: {},
+            methods: {},
+        })
+    </script>
+</body>
+
+</html>
