@@ -14,6 +14,41 @@
     <script src="../jquery.js"></script>
     <script>
         //封装请求函数,函数的返回值是promise对象
+        // function request(url) {
+        //     return p = new Promise((res, rej) => {
+        //         $.ajax({
+        //             url: url,
+        //             success(data) {
+        //                 //成功结果存入promise的res中
+        //                 res(data)
+        //             },
+        //             //失败结果存入promise的rej中
+        //             error(err) {
+        //                 rej(err)
+        //             }
+        //         })
+        //     })
+        // }
+        //调用函数 发送ajax请求 用.then拿到请求成功后的数据
+        // request("http://localhost:3000/a1").then(data => {
+        //     console.log(data);
+        //     //继续调用函数发送请求 注意此时不return后面的.then拿不到数据 所以必须return
+        //     return request("http://localhost:3000/a2")
+        // }).then(data => {
+        //     console.log(data);
+        //     return request("http://localhost:3000/a3")
+
+        // }).then(data => {
+        //     console.log(data);
+        // }).catch(err => {
+        //     console.log(err);
+        // }).finally(res => {
+        //     console.log('不管成功失败都会执行');
+        // })
+
+
+        //用 async await 改进 .then
+        //封装请求函数,函数的返回值是promise对象
         function request(url) {
             return p = new Promise((res, rej) => {
                 $.ajax({
@@ -29,23 +64,17 @@
                 })
             })
         }
-        //调用函数 发送ajax请求 用.then拿到请求成功后的数据
-        request("http://localhost:3000/a1").then(data => {
-            console.log(data);
-            //继续调用函数发送请求 注意此时不return后面的.then拿不到数据 所以必须return
-            return request("http://localhost:3000/a2")
-        }).then(data => {
-            console.log(data);
-            return request("http://localhost:3000/a3")
-
-        }).then(data => {
-            console.log(data);
-        }).catch(err => {
-            console.log(err);
-        }).finally(res => {
-            console.log('不管成功失败都会执行');
-        })
-
+        //额外定义一个async函数
+        async function fn() {
+            // 第一个await没有响应结束,第二个await是不会响应的
+            const res1 = await request('http://localhost:3000/data')
+            const res2 = await request('http://localhost:3000/data1')
+            const res3 = await request('http://localhost:3000/data2')
+            console.log(res1);
+            console.log(res2);
+            console.log(res3);
+        }
+        fn() //调用函数 运行fn里面的代码
         new Vue({
             el: '#app',
             data: {},

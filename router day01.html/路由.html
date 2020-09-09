@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Document</title>
+    <style>
+        a {
+            text-decoration: none;
+        }
+        
+        .router-link-active {
+            color: pink;
+        }
+    </style>
+</head>
+
+<body>
+    <div id='app'>
+        <router-link to='/music'>音乐</router-link>
+        <router-link to='/movie'>电影</router-link>
+        <router-link to='/news'>新闻</router-link>
+        <!-- 站位 -->
+        <router-view></router-view>
+    </div>
+    <!-- 1.引入js -->
+    <script src='../vue.js'></script>
+    <script src="../vue-router_3.0.2.js"></script>
+    <script>
+        //2.创建组件
+        const music = {
+            template: `<h1>音乐列表</h1>`
+        }
+        const movie = {
+            template: ` <div><h2>电影列表</h2>
+        <router-link to='/movie/jingsong'>惊悚</router-link>
+        <router-link to='/movie/love'>爱情</router-link>
+        <router-link to='/movie/vars'>战争</router-link>
+        <router-view></router-view>
+              </div>`
+        }
+        const news = {
+            template: `<h3>新闻列表</h3>`
+        }
+        const jingsong = {
+            template: `<h3>惊悚电影大全</h3>`
+        }
+        const love = {
+            template: `<h2>爱情电影大全</h2>`
+        }
+        const vars = {
+            template: `<h1>战争电影大全</h1>`
+        }
+
+        // 3.创建路由规则 是一个数组
+
+        // 4.创建路由实例并挂载规则
+        const router = new VueRouter({
+            //routes是固定写法不能更改
+            routes: [{
+                //路由从定向 如果是'/' 默认跳转到'/music'
+                path: "/",
+                redirect: "/movie"
+            }, {
+                path: '/music',
+                component: music
+            }, {
+                path: '/movie',
+                component: movie,
+                children: [{
+                    path: '/movie/jingsong',
+                    component: jingsong
+                }, {
+                    path: '/movie/love',
+                    component: love
+                }, {
+                    path: '/movie/vars',
+                    component: vars
+                }, {
+                    //路由从定向 如果是'/' 默认跳转到'/music'
+                    path: "/",
+                    redirect: "/movie/jingsong"
+                }],
+
+            }, {
+                path: '/news',
+                component: news
+            }]
+
+        })
+        new Vue({
+            el: '#app',
+            data: {},
+            //5.将路由实例挂载给vue实例
+            // router: router,
+            router,
+            methods: {},
+        })
+    </script>
+</body>
+
+</html>
