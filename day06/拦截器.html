@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id='app'></div>
+    <script src='https://cdn.jsdelivr.net/npm/vue/dist/vue.js'></script>
+    <script>
+        // 请求拦截器
+        // 请求拦截器的作用是在请求发送前进行一些操作
+        // 例如在每个请求体里加上token，统一做了处理如果以后要改也非常容易
+        // 响应拦截器
+        // 响应拦截器的作用是在接收到响应后进行一些操作
+        // 例如在服务器返回登录状态失效，需要重新登录的时候，跳转到登录页
+
+        // 1. 请求拦截器 
+        axios.interceptors.request.use(
+            function(config) {
+                console.log(config.url)
+                    // # 1.1 任何请求都会经过这一步 在发送请求之前做些什么 
+                config.headers.mytoken = 'nihao';
+                //  # 1.2 这里一定要return 否则配置不成功 
+                return config;
+            },
+            function(err) {
+                //  #1.3 对请求错误做点什么
+                console.log(err)
+            })
+        new Vue({
+            el: '#app',
+            data: {},
+            methods: {},
+        })
+    </script>
+</body>
+
+</html>

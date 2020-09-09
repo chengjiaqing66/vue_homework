@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style type="text/css">
+        .grid {
+            margin: auto;
+            width: 530px;
+            text-align: center;
+        }
+        
+        .grid table {
+            border-top: 1px solid #C2D89A;
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .grid th,
+        td {
+            padding: 10;
+            border: 1px dashed #F3DCAB;
+            height: 35px;
+            line-height: 35px;
+        }
+        
+        .grid th {
+            background-color: #F3DCAB;
+        }
+        
+        .grid .book {
+            padding-bottom: 10px;
+            padding-top: 5px;
+            background-color: #F3DCAB;
+        }
+        
+        .grid .total {
+            height: 30px;
+            line-height: 30px;
+            background-color: #F3DCAB;
+            border-top: 1px solid #C2D89A;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="grid">
+            <div>
+                <h1>图书管理</h1>
+                <div class="book">
+                    <div>
+                        <label for="id"> 编号： </label> <input disabled='true' v-model='id' type="text" id="id" />
+                        <label for="name"> 名称： </label>
+                        <input v-abc v-model='name' type="text" id="name" /> <button @click="add" :disabled='isSubmit'>提交</button>
+
+                    </div>
+                </div>
+            </div>
+            <div class="total"><span>图书总数：</span> <span>计算属性{{count}} 直接渲染{{books.length}}</span></div>
+            <table>
+                <thead>
+
+                    <tr>
+                        <th>编号</th>
+                        <th>名称</th>
+                        <th>时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for='(item,index) in books'>
+                        <td>{{item.id}}</td>
+                        <td>{{item.name}}</td>
+                        <td>{{item.data | date('yyyy-MM-dd hh:mm:ss')}}</td>
+                        <td><a href="javascript:;" @click='xiugai(item.id)'>修改</a> <span>|</span> <a href="javascript:;" @click='del(item.id)'>删除</a></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="../../../vue.js"></script>
+    <script src="../../../axios.js"></script>
+    <script>
+        // 配置公共的请求头
+        axios.defaults.baseURL = 'http://localhost:3000';
+        //  响应拦截器 
+        axios.interceptors.response.use(
+            function(config) {
+                // console.log(config.url)
+                // # 1.1 任何请求都会经过这一步 在发送请求之前做些什么 
+                // config.headers.mytoken = 'nihao';
+                //  # 1.2 这里一定要return 否则配置不成功 
+                // console.log(config);
+                return config.data; //config.data直接拿到res.data中数据 过滤之后每次ajax响应的都是一个数组
+            },
+            function(err) {
+                //  #1.3 对请求错误做点什么
+                console.log(err)
+            })
+
+
+        //全局自定义指令光标选中
+        Vue.directive('abc', {
+                inserted(el) {
+                    el.focus()
+                }
+            })
+            //定义全局的时间过滤器
+        Vue.filter('date', (val, a) => {
+                function dateFormat(date, format) {
+                    if (typeof date === "string") {
+                        var mts = date.match(/(\/Date\((\d+)\)\/)/);
+                        if (mts && mts.length >= 3) {
+                            date = parseInt(mts[2]);
+                        }
+                    }
+                    date = new Date(date);
+                    if (!date || date.toUTCString() == "Invalid Date") {
+                        return "";
+                    }
+                    var map = {
+                        "M": date.getMonth() + 1, //月份 
+                        "d": date.getDate(), //日 
+                        "h": date.getHours(), //小时 
+                        "m": date.getMinutes(), //分 
+                        "s": date.getSeconds(), //秒 
+                        "q": Math.floor((date.getMonth() + 3) / 3), //季度 
+                        "S": date.getMilliseconds() //毫秒 
+                    };
+
+                    format = format.replace(/([yMdhmsqS])+/g, function(all, t) {
+                        var v = map[t];
+                        if (v !== undefined) {
+                            if (all.length > 1) {
+                                v = '0' + v;
+                                v = v.substr(v.length - 2);
+                            }
+                            return v;
+                        } else if (t === 'y') {
+                            return (date.getFullYear() + '').substr(4 - all.length);
+                        }
+                        return all;
+                    });
+                    return format;
+                }
+
+                return dateFormat(val, a)
+            })
+            // 创建vue实例
+        new Vue({
+            el: "#app ",
+            data: {
+                //定义输入框中的id值 因为用户需要填写故需 双向绑定
+                id: '',
+                //定义输入框中的name值 因为用户需要填写故需 双向绑定
+                name: '',
+                //定义业务逻辑中的 添加按钮是添加还是修改 默认false添加 true为修改
+                isEdit: false,
+                books: [],
+                isSubmit: false
+            },
+            //业务逻辑放在methods里面
+            methods: {
+                //封装获取图书列表
+                async getbooks() {
+                    this.books = await axios.get('books')
+                },
+
+                //添加功能
+                async add() {
+                    //判断isEdit是true走修改路线
+                    if (this.isEdit) {
+                        const res = await axios.put('books/' + this.id, {
+                            name: this.name
+                        })
+                        if (res.status == 200) {
+                            this.getbooks()
+                        }
+                        //修改完成把开关重置为默认的添加 不然会出现添加不上
+                        this.isEdit = false
+                            //else为添加逻辑中的内容
+                    } else {
+                        //非空判断
+                        if (!this.name) {
+                            return alert(`图书名或id不能为空`)
+                        }
+                        //注意id值需要累加
+                        // this.books.push({
+                        //     id: this.books.length ? this.books[this.books.length - 1].id + 1 : 1,
+                        //     name: this.name,
+                        //     data: new Date
+                        // })
+                        const res = await axios.post('books', {
+                            name: this.name
+
+                        })
+                        console.log(res);
+                        if (res.status == 200) {
+                            this.getbooks()
+                        }
+                    }
+                    //添加或修改结束清空数据
+                    this.id = ''
+                    this.name = ''
+                },
+                //删除功能
+                async del(i) {
+                    //根据id删除数据
+                    const res = await axios.delete('books/' + i)
+                    if (res.status == 200) {
+                        this.getbooks()
+                    }
+                    // this.books.splice(i, 1)
+                },
+
+                //修改功能
+                async xiugai(id) {
+                    //修改的时候 注意要把开关设置为true 上面的添加逻辑就会走修改逻辑
+                    this.isEdit = true
+
+                    const res = await axios.get('books/' +
+                        id)
+                    this.id = res.id
+                    this.name = res.name
+
+                }
+            },
+
+            //计算属性显示总条数就是数组长度
+            computed: {
+                count() {
+                    return this.books.length
+                }
+            },
+
+            //dom元素已经被创建了发送请求拿到数据库中的data数据的数组赋值给vue实例的books数组
+            created() {
+                // const data = [{
+                //     id: 1,
+                //     name: '红龙梦',
+                //     data: new Date()
+                // }, {
+                //     id: 2,
+                //     name: '三国演义',
+                //     data: new Date()
+
+                // }, {
+                //     id: 3,
+                //     name: '西游记',
+                //     data: new Date()
+                // }, {
+                //     id: 4,
+                //     name: '水浒传',
+                //     data: new Date()
+                // }]
+
+                this.getbooks()
+            },
+            //侦听器侦听name的值,此时this.name和this.id都存在值.由于是双向数据绑定this.name的值被用户更改侦听器就可以捕获到调用name方法.检测数组中有没有该name值必须要用some方法的返回值.返回值是true就是存在.把true赋值给禁用按钮.按钮自然就被禁用了
+            watch: {
+                async name(val) {
+
+                    const res = await axios.get('books/book/' + val)
+                    this.isSubmit = res.status == 1 ? true : false
+                        //用户输入的name值和数据中的name值一样.禁用
+                        // this.isSubmit = this.books.some(item => item.name == val)
+                }
+            }
+
+
+        });
+    </script>
+</body>
+
+</html>

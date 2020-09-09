@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id='app'>
+        <button @click='del'>删除</button>
+        <button @click='add'>新增</button>
+        <button @click='edit'>修改</button>
+        <li v-for='item in list' :key="item.id">{{item.name}}</li>
+    </div>
+
+    <script src='https://cdn.jsdelivr.net/npm/vue/dist/vue.js'></script>
+    <script src="../axios.js"></script>
+    <script>
+        //配置公共的请求头
+        axios.defaults.baseURL = 'http://localhost:3000/';
+        // 配置公共的请求头 
+        axios.defaults.headers.common['Authorization'] = 'tokenzfc'
+        new Vue({
+            el: '#app',
+            data: {
+                list: []
+            },
+            created() {
+                //把数据库的数据赋值给list数组以便后续操作
+                axios.get('fruits').then(res => {
+                        this.list = res.data
+                    })
+                    //查询id为4的数据
+                axios.get('fruits/4').then(res => {
+                    console.log(res.data);
+
+                })
+            },
+            methods: {
+                //删除id为3的数据
+                del() {
+                    axios.delete('fruits/3').then(res => {
+                        console.log(res.data);
+                    })
+                },
+                //增加数据
+                add() {
+                    axios.post('fruits', {
+                        name: '猕猴桃'
+                    }).then(res => {
+                        console.log(res.data);
+                    })
+                },
+                //修改id为4
+                edit() {
+                    axios.put("http://localhost:3000/fruits/4", {
+                        name: '定时炸弹'
+                    }).then(res => {
+                        console.log(res.data);
+                    })
+                }
+            },
+        })
+    </script>
+</body>
+
+</html>
