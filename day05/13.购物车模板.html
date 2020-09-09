@@ -117,8 +117,8 @@
                                 <img :src="item.img" />
                                 <div class="name">{{item.name}}</div>
                                 <div class="change">
-                                    <a href="">－</a> <input type="text" class="num" value="1" />
-                                    <a href="">＋</a>
+                                    <a href="" @click.prevent='change1(item.id)'>－</a> <input @blur='change3(item.id,$event)' type="number" class="num" :value="item.num" />
+                                    <a href="" @click.prevent='change2(item.id)'>＋</a>
                                 </div>
                                 <div class="del" @click='$emit("fun",item.id)'>×</div>
                             </div>
@@ -126,6 +126,28 @@
                             
                         </div>`,
             methods: {
+                change3(id, event) {
+                    this.$emit('focus', {
+                        id,
+                        num: event.target.value = Number(event.target.value) == event.target.value ? event.target.value : 1,
+                        shijian: 'focus'
+                    })
+                },
+                change2(id) {
+                    this.$emit('focus', {
+                        id,
+                        shijian: 'add'
+                    })
+                },
+                change1(id) {
+                    this.$emit('focus', {
+                        id,
+                        shijian: 'reduce'
+                    })
+
+                },
+
+
                 // del(id) {
                 //     this.$emit("fun", id)
 
@@ -156,7 +178,7 @@
                 
                 <com-title :uname='uname'></com-title>
                
-                <com-main :list='list' @fun='del($event)'></com-main>
+                <com-main :list='list' @fun='del($event)' @focus='change($event)' @add='change($event)' @reduce='change($event)'></com-main>
             
                 <com-total :list='list'></com-total>
             </div>`,
@@ -205,7 +227,39 @@
                     del(id) {
                         let index = this.list.findIndex(item => item.id == id)
                         this.list.splice(index, 1)
+                    },
+                    change(obj) {
+                        if (obj.shijian == "focus") {
+
+                            this.list.some(item => {
+                                if (item.id == obj.id) {
+                                    item.num = obj.num
+                                    return true
+                                }
+                            })
+                        } else if (obj.shijian == 'add') {
+                            this.list.some(item => {
+                                if (item.id == obj.id) {
+                                    item.num++
+                                        return true
+                                }
+                            })
+                        } else if (obj.shijian == 'reduce') {
+                            this.list.some(item => {
+                                if (item.id == obj.id) {
+
+                                    if (item.num < 1) {
+                                        return
+                                    }
+                                    item.num--
+                                        return true
+                                }
+                            })
+                        }
+
                     }
+
+
                 }
             })
             //爷组件

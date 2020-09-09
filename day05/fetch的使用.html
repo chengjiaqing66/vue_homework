@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="../jquery.js"></script>
+    <script>
+        //res.text()是promise对象 返回后.then拿到成功后的结果
+        fetch('http://localhost:3000/books/100', {
+                method: 'delete'
+            }).then(res => res.text()).then(res => {
+                console.log(res);
+            })
+            //post请求
+        fetch('http://localhost:3000/books/100', {
+            method: 'post',
+            data: JSON.stringify({
+                "uname": '张三',
+                "pwd": "123456"
+            }),
+            //需要设置请求头.这里就不设置了
+
+        }).then(res => res.text()).then(res => {
+            console.log(res);
+        })
+    </script>
+</body>
+
+</html>

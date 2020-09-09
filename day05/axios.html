@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="../axios.js"></script>
+    <script>
+        //axios发送Get请求拿到的是promise对象 可以直接.then axios响应的结果给我们做了额外的包装处理 再.data一下才能拿到我们想要的数据
+        axios.get('http://localhost:3000/data').then(res => {
+            console.log(res.data);
+        })
+    </script>
+</body>
+
+</html>

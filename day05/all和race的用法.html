@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id='app'></div>
+    <script src='https://cdn.jsdelivr.net/npm/vue/dist/vue.js'></script>
+    <script src="../jquery.js"></script>
+    <script>
+        //封装请求函数,函数的返回值是promise对象
+        function request(url) {
+            return p = new Promise((res, rej) => {
+                $.ajax({
+                    url: url,
+                    success(data) {
+                        //成功结果存入promise的res中
+                        res(data)
+                    },
+                    //失败结果存入promise的rej中
+                    error(err) {
+                        rej(err)
+                    }
+                })
+            })
+        }
+        //调用函数 发送ajax请求 用.then拿到请求成功后的数据
+        request("http://localhost:3000/a1").then(data => {
+            console.log(data);
+            //继续调用函数发送请求 注意此时不return后面的.then拿不到数据 所以必须return
+            return request("http://localhost:3000/a2")
+        }).then(data => {
+            console.log(data);
+            return request("http://localhost:3000/a3")
+
+        }).then(data => {
+            console.log(data);
+        }).catch(err => {
+            console.log(err);
+        }).finally(res => {
+            console.log('不管成功失败都会执行');
+        })
+        Promise.all([request("http://localhost:3000/a1"), request("http://localhost:3000/a2"), request("http://localhost:3000/a3")]).then(res => {
+            console.log(res);
+        })
+        Promise.race([request("http://localhost:3000/a1"), request("http://localhost:3000/a2"), request("http://localhost:3000/a3")]).then(res => {
+            console.log(res);
+        })
+
+        new Vue({
+            el: '#app',
+            data: {},
+            methods: {},
+        })
+    </script>
+</body>
+
+</html>
