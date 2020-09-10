@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id='app'>
+        <!-- routes---路由实例中的属性:路由的规则 -->
+        <!-- router---一般变量定义为router路由实例   也是vue实例的属性   路由挂载 -->
+        <!-- $route---路由信息(地址栏) 用于侦听器中 -->
+        <!-- $router---路由实例(编程式导航使用里面的方法 如 push go ...) -->
+        <router-link to='/apple/123'>苹果</router-link>
+        <router-link to='/banana'>香蕉</router-link>
+        <router-link to='/origin/88'>橘子</router-link>
+        <!-- 路由重命名后需要属性绑定 name值后面加引号 传参用params:{} -->
+        <router-link :to='{name:"abc",params:{id:99}}'>哈密瓜</router-link>
+
+        <router-view></router-view>
+
+
+    </div>
+    <script src='../vue.js'></script>
+    <script src="../vue-router_3.0.2.js"></script>
+
+    <script>
+        const Apple = {
+            template: `<div>
+                <h1>苹果{{id}}</h1>
+                <button @click='fun'>点击跳转到香蕉页面</button>
+            </div>`,
+            props: ['id'],
+            methods: {
+                fun() {
+                    this.$router.push('/banana')
+                }
+            }
+        }
+        const Banana = {
+            template: `<div>
+                <h1>香蕉 姓名{{name}} 年龄{{age}}</h1>
+                <button @click='fn'>点击跳转到苹果页面</button>
+            </div>`,
+            props: ['name', 'age', 'boo'],
+            methods: {
+                fn() {
+                    //编程式导航跳转传参
+                    this.$router.push("/apple/9")
+                }
+            }
+        }
+        const Origin = {
+            template: `<h1>橘子id:{{id}}姓名 {{name}}性别 {{sex}}</h1>`,
+            props: ['id', 'name', 'sex']
+        }
+        const hamigua = {
+            template: `<h1>哈密瓜{{id}}</h1>`,
+            props: ['id']
+        }
+        const router = new VueRouter({
+            routes: [
+                //路由重定向 如果打开的页面是空白，默认指定跳转某个地址
+                {
+                    path: '/',
+                    redirect: '/apple'
+                },
+                //path是路径 表示的是路由地址
+                {
+                    //:id占位符
+                    path: '/apple/:id',
+                    component: Apple,
+                    //允许传参
+                    props: true
+                }, {
+                    path: '/banana',
+                    component: Banana,
+                    //对象的方式传参
+                    props: {
+                        name: '小明',
+                        age: 18,
+                        boo: "true"
+                    }
+                }, {
+                    //注意 一定要在路径中加:id 防止匹配不到
+                    path: '/origin/:id',
+                    component: Origin,
+                    //函数的方式传参
+                    props(router) {
+                        return {
+                            id: router.params.id,
+                            name: '小明',
+                            sex: '男'
+                        }
+                    }
+                },
+
+                //path是路径 表示的是路由地址
+                {
+                    //:id占位符
+                    path: '/apple/apple/apple/apple/apple/apple/apple/apple/apple',
+                    //路由重命名 名字太长了
+                    name: 'abc',
+                    component: hamigua,
+                    //允许传参
+                    props: true
+                }
+            ]
+        })
+
+        // const router = new VueRouter({
+        //     routes: [{
+        //         path: '/',
+        //         redirect: '/apple'
+        //     }, {
+        //         path: '/apple',
+        //         component: Apple
+        //     }, {
+        //         path: '/banana',
+        //         component: Banana
+        //     }, {
+        //         path: '/origin',
+        //         component: Origin
+        //     }]
+        // })
+        new Vue({
+            el: '#app',
+            data: {
+                flag: true
+            },
+            methods: {},
+            router,
+            watch: {
+                //'$route'是 
+                '$route' (val) {
+                    console.log(val.params);
+                }
+            }
+
+        })
+    </script>
+</body>
+
+</html>
