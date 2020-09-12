@@ -32,6 +32,10 @@
             template: `<div>
                 <h1>苹果{{id}}</h1>
                 <button @click='fun'>点击跳转到香蕉页面</button>
+                <router-link to='/apple/happle/666666'>红苹果</router-link>
+                <router-link to='/apple/lapple'>蓝苹果</router-link>
+                <router-link to='/apple/zapple'>紫苹果</router-link>
+                <router-view></router-view>
             </div>`,
             props: ['id'],
             methods: {
@@ -61,6 +65,16 @@
             template: `<h1>哈密瓜{{id}}</h1>`,
             props: ['id']
         }
+        const happle = {
+            props: ['ida'],
+            template: `<h1>这是一个红苹果{{ida}}</h1>`
+        }
+        const lapple = {
+            template: `<h1>这是一个蓝苹果</h1>`
+        }
+        const zapple = {
+            template: `<h1>这是一个紫苹果</h1>`
+        }
         const router = new VueRouter({
             routes: [
                 //路由重定向 如果打开的页面是空白，默认指定跳转某个地址
@@ -74,7 +88,18 @@
                     path: '/apple/:id',
                     component: Apple,
                     //允许传参
-                    props: true
+                    props: true,
+                    children: [{
+                        path: '/apple/happle/:ida',
+                        component: happle,
+                        props: true
+                    }, {
+                        path: '/apple/lapple',
+                        component: lapple
+                    }, {
+                        path: '/apple/zapple',
+                        component: zapple
+                    }]
                 }, {
                     path: '/banana',
                     component: Banana,
@@ -89,11 +114,11 @@
                     path: '/origin/:id',
                     component: Origin,
                     //函数的方式传参
-                    props($route) {
+                    props: route => {
                         return {
-                            id: $route.params.id,
-                            name: '小明',
-                            sex: '男'
+                            id: route.params.id,
+                            name: '张三',
+                            sex: '女'
                         }
                     }
                 },
